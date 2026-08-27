@@ -29,15 +29,17 @@ class _JoinRoomScreenState extends State<JoinRoomScreen> {
 
   @override
   void dispose() {
-    super.dispose();
+    _socketMethods.removeJoinRoomListeners();
     nameController.dispose();
     gameidController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
+      appBar: AppBar(title: const Text('Join Room')),
       body: Responsive(
         child: Container(
           margin: const EdgeInsets.symmetric(horizontal: 10),

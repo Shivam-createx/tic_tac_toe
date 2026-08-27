@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tic_tac_toe/provider/room_data_provider.dart';
 import 'package:tic_tac_toe/screens/main_screen.dart';
-import 'package:tic_tac_toe/utils/colors.dart';
 import 'package:tic_tac_toe/utils/responsive.dart';
 import 'package:tic_tac_toe/widget/off_game_board.dart';
 import 'package:tic_tac_toe/widget/off_score_board.dart';
@@ -34,8 +33,6 @@ class _OffGameScreenState extends State<OffGameScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Tic-Tac-Toe'),
-        elevation: 0,
-        backgroundColor: bgcolor,
         actions: [
           PopupMenuButton(
             icon: const Icon(Icons.logout_outlined),
@@ -50,7 +47,7 @@ class _OffGameScreenState extends State<OffGameScreen> {
             },
             itemBuilder: (BuildContext context) {
               return [
-                const PopupMenuItem(value: 'logout', child: Text('Logout')),
+                const PopupMenuItem(value: 'logout', child: Text('Exit game')),
               ];
             },
           ),

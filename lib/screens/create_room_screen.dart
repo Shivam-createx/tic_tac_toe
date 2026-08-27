@@ -19,6 +19,7 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
 
   @override
   void dispose() {
+    _socketMethod.removeCreateRoomListeners();
     nameController.dispose();
     super.dispose();
   }
@@ -33,6 +34,7 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
+      appBar: AppBar(title: const Text('Create Room')),
       body: Responsive(
         child: Container(
           margin: const EdgeInsets.symmetric(horizontal: 10),

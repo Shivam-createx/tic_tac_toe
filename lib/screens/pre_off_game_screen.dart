@@ -101,6 +101,7 @@ class _PreOffGameScreenState extends State<PreOffGameScreen> {
     );
 
     return Scaffold(
+      appBar: AppBar(title: const Text('Offline Game')),
       body: Center(
         child: Responsive(
           child: Column(

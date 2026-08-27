@@ -5,6 +5,7 @@ import 'package:tic_tac_toe/provider/room_data_provider.dart';
 import 'package:tic_tac_toe/resouces/game_method.dart';
 import 'package:tic_tac_toe/resouces/socket_client.dart';
 import 'package:tic_tac_toe/screens/game_screen.dart';
+import 'package:tic_tac_toe/screens/main_screen.dart';
 import 'package:tic_tac_toe/utils/utils.dart';
 import 'package:tic_tac_toe/widget/show_game_dialog.dart';
 
@@ -15,9 +16,10 @@ class SocketMethods {
 
   void _navigateToGameScreen(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!context.mounted) return;
       final navigator = Navigator.of(context, rootNavigator: true);
       if (navigator.mounted) {
-        navigator.pushNamed(GameScreen.roomName);
+        navigator.pushReplacementNamed(GameScreen.roomName);
       }
     });
   }
@@ -44,6 +46,7 @@ class SocketMethods {
   //Listners
   void createRoomSuccessListner(BuildContext context) {
     _socketClient.on('createRoomSuccess', (room) {
+      if (!context.mounted) return;
       Provider.of<RoomDataProvider>(
         context,
         listen: false,
@@ -54,6 +57,7 @@ class SocketMethods {
 
   void joinRoomSuccessListner(BuildContext context) {
     _socketClient.on('joinRoomSuccess', (roomData) {
+      if (!context.mounted) return;
       Provider.of<RoomDataProvider>(
         context,
         listen: false,
@@ -64,8 +68,19 @@ class SocketMethods {
 
   void errorOccuredListner(BuildContext context) {
     _socketClient.on('errorOccured', (message) {
+      if (!context.mounted) return;
       snackbarMessage(context, message);
     });
+  }
+
+  void removeCreateRoomListeners() {
+    _socketClient.off('createRoomSuccess');
+  }
+
+  void removeJoinRoomListeners() {
+    _socketClient.off('joinRoomSuccess');
+    _socketClient.off('errorOccured');
+    _socketClient.off('updatePlayer');
   }
 
   void updatePlayerDataListner(BuildContext context) {
@@ -98,7 +113,14 @@ class SocketMethods {
       );
       dataProvider.updateDisplayElement(data['index'], data['choice']);
       dataProvider.updateRoomData(data['room']);
-      GameMethod().checkWinner(context, _socketClient);
+
+      final winningMovePlayer =
+          data['choice'] == dataProvider.player1.playerType
+          ? dataProvider.player1
+          : dataProvider.player2;
+      if (winningMovePlayer.socketId == _socketClient.id) {
+        GameMethod().checkWinner(context, _socketClient);
+      }
     });
   }
 
@@ -119,7 +141,11 @@ class SocketMethods {
   void endGameListner(BuildContext context) {
     _socketClient.on('endGame', (playerData) {
       showGameDialog(context, '${playerData['nickname']} won the game!');
-      Navigator.popUntil(context, (value) => false);
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        MainScreen.routeName,
+        (route) => false,
+      );
     });
   }
 }

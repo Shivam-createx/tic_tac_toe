@@ -35,6 +35,7 @@ class _GameScreenState extends State<GameScreen> {
     return isJoin
         ? const WaitingLobby()
         : Scaffold(
+            appBar: AppBar(title: Text('Tic-Tac-Toe')),
             body: SafeArea(
               child: Responsive(
                 child: SingleChildScrollView(
