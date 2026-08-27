@@ -12,14 +12,14 @@ class SocketClient {
     }
 
     if (kIsWeb) {
-      return 'http://localhost:3000';
+      return 'https://server-production-ce2e.up.railway.app';
     }
 
     if (defaultTargetPlatform == TargetPlatform.android) {
-      return 'http://10.190.127.239:3000';
+      return 'https://server-production-ce2e.up.railway.app';
     }
 
-    return 'http://localhost:3000';
+    return 'https://server-production-ce2e.up.railway.app';
   }
 
   SocketClient._internal() {
